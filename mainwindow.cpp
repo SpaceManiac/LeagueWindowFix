@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <qtimer.h>
 #include <time.h>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -7,9 +8,22 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-	logText("League Window Fix opened");
+
+	timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
+	timer->start(1000);
+
+	logText("League Window Fix starting");
 	detectValues();
 	startAutofix();
+
+	windowKnown = checkWindow();
+	if (!windowKnown) {
+		logText("League of Legends not running, will monitor for it");
+	} else {
+		logText("League of Legends found");
+		fixIfNeeded();
+	}
 }
 
 MainWindow::~MainWindow()
@@ -30,24 +44,53 @@ void MainWindow::stopAutofix() {
 }
 
 void MainWindow::detectValues() {
-	int x, y, w, h;
-
-	// TODO
-	x = y = 0;
-	w = 1920;
-	h = 1080;
+	int w, h;
+	detectMonitorSize(&w, &h);
 
 	// This is a kind of a weird way to itoa to me
-	ui->windowX->setText(QString("%1").arg(x));
-	ui->windowY->setText(QString("%1").arg(y));
+	ui->windowX->setText("0");
+	ui->windowY->setText("0");
 	ui->windowW->setText(QString("%1").arg(w));
 	ui->windowH->setText(QString("%1").arg(h));
-	logText(QString("Detected screen size %1x%2").arg(w).arg(h));
 }
 
 void MainWindow::moveWindow() {
+	if (!windowKnown) return;
 
-	logText(QString("Moved window"));
+	int x = ui->windowX->text().toInt();
+	int y = ui->windowY->text().toInt();
+	int w = ui->windowW->text().toInt();
+	int h = ui->windowH->text().toInt();
+
+	setPosition(x, y, w, h);
+	logText(QString("Manually moved to %1,%2 %3x%4").arg(x).arg(y).arg(w).arg(h));
+}
+
+void MainWindow::timerUpdate() {
+	bool check = checkWindow();
+
+	if (check && !windowKnown) {
+		logText("League of Legends has opened");
+	} else if (!check && windowKnown) {
+		logText("League of Legends has closed");
+	}
+
+	windowKnown = check;
+
+	if (windowKnown && autofix) {
+		fixIfNeeded();
+	}
+}
+
+void MainWindow::fixIfNeeded() {
+	int x, y, w, h, dw, dh;
+	getPosition(&x, &y, &w, &h);
+	detectMonitorSize(&dw, &dh);
+
+	if (x != 0 || y != 0 || w != dw || h != dh) {
+		setPosition(0, 0, dw, dh);
+		logText(QString("Automatically fullscreened from %1,%2 %3x%4").arg(x).arg(y).arg(w).arg(h));
+	}
 }
 
 void MainWindow::logText(QString text) {
