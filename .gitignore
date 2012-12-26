@@ -1,0 +1,5 @@
+*.user
+ui_*.h
+Makefile*
+debug/
+release/

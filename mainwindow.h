@@ -14,9 +14,22 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
+
+public slots:
+	void startAutofix();
+	void stopAutofix();
+	void detectValues();
+	void moveWindow();
+
+	void logText(QString text);
 	
 private:
 	Ui::MainWindow *ui;
+
+	time_t logTime;
+	char logTimeBuf[64];
+
+	bool autofix;
 };
 
 #endif // MAINWINDOW_H
