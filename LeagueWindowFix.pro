@@ -18,3 +18,8 @@ HEADERS  += mainwindow.h \
     actions.h
 
 FORMS    += mainwindow.ui
+
+RC_FILE = icon.rc
+
+OTHER_FILES += \
+    icon.rc

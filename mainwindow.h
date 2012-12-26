@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSystemTrayIcon>
 #include "actions.h"
 
 namespace Ui {
@@ -24,8 +25,10 @@ public slots:
 	void stopAutofix();
 	void detectValues();
 	void moveWindow();
+	void minimizeToTray();
 
 	void timerUpdate();
+	void trayActivated(QSystemTrayIcon::ActivationReason reason);
 	
 private:
 	Ui::MainWindow *ui;
@@ -37,6 +40,7 @@ private:
 	bool windowKnown;
 
 	QTimer *timer;
+	QSystemTrayIcon *trayIcon;
 };
 
 #endif // MAINWINDOW_H

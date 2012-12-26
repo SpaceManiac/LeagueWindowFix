@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
+    <width>513</width>
     <height>300</height>
    </rect>
   </property>
@@ -144,6 +144,13 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="minimizeToTray">
+        <property name="text">
+         <string>Minimize to Tray</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -171,11 +178,11 @@ p, li { white-space: pre-wrap; }
    <slot>startAutofix()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>396</x>
+     <x>631</x>
      <y>46</y>
     </hint>
     <hint type="destinationlabel">
-     <x>657</x>
+     <x>450</x>
      <y>216</y>
     </hint>
    </hints>
@@ -187,11 +194,11 @@ p, li { white-space: pre-wrap; }
    <slot>stopAutofix()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>409</x>
+     <x>631</x>
      <y>71</y>
     </hint>
     <hint type="destinationlabel">
-     <x>614</x>
+     <x>450</x>
      <y>179</y>
     </hint>
    </hints>
@@ -203,11 +210,11 @@ p, li { white-space: pre-wrap; }
    <slot>detectValues()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>415</x>
+     <x>631</x>
      <y>96</y>
     </hint>
     <hint type="destinationlabel">
-     <x>664</x>
+     <x>450</x>
      <y>195</y>
     </hint>
    </hints>
@@ -219,12 +226,28 @@ p, li { white-space: pre-wrap; }
    <slot>moveWindow()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>369</x>
+     <x>631</x>
      <y>228</y>
     </hint>
     <hint type="destinationlabel">
-     <x>609</x>
+     <x>450</x>
      <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minimizeToTray</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>minimizeToTray()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>631</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>265</y>
     </hint>
    </hints>
   </connection>
@@ -234,5 +257,6 @@ p, li { white-space: pre-wrap; }
   <slot>stopAutofix()</slot>
   <slot>detectValues()</slot>
   <slot>moveWindow()</slot>
+  <slot>minimizeToTray()</slot>
  </slots>
 </ui>

@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <qtimer.h>
+#include <QTimer>
 #include <time.h>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -12,6 +12,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
 	timer->start(1000);
+
+	trayIcon = new QSystemTrayIcon(this);
+	trayIcon->setIcon(windowIcon());
+	trayIcon->setToolTip("League Window Fix");
+	trayIcon->hide();
+	connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
 
 	logText("League Window Fix starting");
 	detectValues();
@@ -66,6 +72,12 @@ void MainWindow::moveWindow() {
 	logText(QString("Manually moved to %1,%2 %3x%4").arg(x).arg(y).arg(w).arg(h));
 }
 
+void MainWindow::minimizeToTray() {
+	hide();
+	trayIcon->show();
+	trayIcon->showMessage("League Window Fix", "Minimized to system tray, click again to open");
+}
+
 void MainWindow::timerUpdate() {
 	bool check = checkWindow();
 
@@ -80,6 +92,12 @@ void MainWindow::timerUpdate() {
 	if (windowKnown && autofix) {
 		fixIfNeeded();
 	}
+}
+
+void MainWindow::trayActivated(QSystemTrayIcon::ActivationReason reason) {
+	show();
+	setFocus();
+	trayIcon->hide();
 }
 
 void MainWindow::fixIfNeeded() {

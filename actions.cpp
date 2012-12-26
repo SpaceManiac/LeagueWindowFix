@@ -4,7 +4,7 @@
 HWND lHwnd;
 
 bool checkWindow() {
-	lHwnd = FindWindow(NULL, L"projects"); // Change me
+	lHwnd = FindWindow(NULL, L"League of Legends (TM) Client"); // Change me
 	return lHwnd != NULL;
 }
 
